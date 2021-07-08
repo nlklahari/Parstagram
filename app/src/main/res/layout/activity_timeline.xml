@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginTop="666dp"
-        android:layout_marginEnd="22dp"
+        android:layout_marginTop="646dp"
+        android:layout_marginEnd="20dp"
         android:text="Log out"
         tools:layout_editor_absoluteX="280dp"
         tools:layout_editor_absoluteY="664dp" />
