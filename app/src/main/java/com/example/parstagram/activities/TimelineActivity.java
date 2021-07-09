@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.parstagram.EndlessRecyclerViewScrollListener;
 import com.example.parstagram.R;
 import com.example.parstagram.adapters.TimelineAdapter;
 import com.example.parstagram.models.Post;
@@ -54,7 +55,7 @@ public class TimelineActivity extends AppCompatActivity {
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
 
-    bottomNavigationView = findViewById(R.id.bottom_navigation);
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
         rvFeed = findViewById(R.id.rvFeed);
 
         // initialize the array that will hold posts and create a PostsAdapter
@@ -64,9 +65,17 @@ public class TimelineActivity extends AppCompatActivity {
         // set the adapter on the recycler view
         rvFeed.setAdapter(adapter);
         // set the layout manager on the recycler view
-        rvFeed.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        rvFeed.setLayoutManager(layoutManager);
         // query posts from Parstagram
         queryPosts();
+
+        rvFeed.addOnScrollListener(new EndlessRecyclerViewScrollListener(layoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                loadMorePosts(totalItemsCount);
+            }
+        });
 
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -128,8 +137,8 @@ public class TimelineActivity extends AppCompatActivity {
         this.startActivity(intent);
 
         // TODO: Have to refresh to get to newly added post
-        adapter.notifyItemInserted(0);
-        rvFeed.smoothScrollToPosition(0);
+//        adapter.notifyItemInserted(0);
+//        rvFeed.smoothScrollToPosition(0);
     }
 
     private void queryPosts() {
@@ -139,6 +148,38 @@ public class TimelineActivity extends AppCompatActivity {
         query.include(Post.KEY_USER);
         // limit query to latest 20 items
         query.setLimit(20);
+        // order posts by creation date (newest first)
+        query.addDescendingOrder("createdAt");
+        // start an asynchronous call for posts
+        query.findInBackground(new FindCallback<Post>() {
+            @Override
+            public void done(List<Post> posts, ParseException e) {
+                // check for errors
+                if (e != null) {
+                    Log.e(TAG, "Issue with getting posts", e);
+                    return;
+                }
+
+                // for debugging purposes let's print every post description to logcat
+                for (Post post : posts) {
+                    Log.i(TAG, "Post: " + post.getCaption() + ", username: " + post.getUser().getUsername());
+                }
+
+                // save received posts to list and notify adapter of new data
+                adapter.addAll(posts);
+            }
+        });
+    }
+
+    private void loadMorePosts(int offset) {
+        // specify what type of data we want to query - Post.class
+        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
+        // include data referred by user key
+        query.include(Post.KEY_USER);
+        // limit query to latest 20 items
+        query.setLimit(20);
+        // skip by offset amount
+        query.setSkip(offset);
         // order posts by creation date (newest first)
         query.addDescendingOrder("createdAt");
         // start an asynchronous call for posts
