@@ -1,4 +1,4 @@
-package com.example.parstagram;
+package com.example.parstagram.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
@@ -15,20 +15,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.parse.FindCallback;
+import com.example.parstagram.BitmapScaler;
+import com.example.parstagram.R;
+import com.example.parstagram.models.Post;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
-import org.w3c.dom.Text;
-
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.util.List;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class PostActivity extends AppCompatActivity {
 
@@ -51,8 +51,6 @@ public class PostActivity extends AppCompatActivity {
         etCaption = findViewById(R.id.etCaption);
         btnTakePhoto = findViewById(R.id.btnTakePhoto);
         btnPost = findViewById(R.id.btnPost);
-
-        // queryPosts();
 
         // Action when Take Photo is clicked
         btnTakePhoto.setOnClickListener(new View.OnClickListener() {
@@ -125,8 +123,31 @@ public class PostActivity extends AppCompatActivity {
                 // by this point we have the camera photo on disk
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 // TODO: RESIZE BITMAP, see section below
+                // See code above
+                Uri takenPhotoUri = Uri.fromFile(getPhotoFileUri(photoFileName));
+                // by this point we have the camera photo on disk
+                Bitmap rawTakenImage = BitmapFactory.decodeFile(takenPhotoUri.getPath());
+                // See BitmapScaler.java: https://gist.github.com/nesquena/3885707fd3773c09f1bb
+                Bitmap resizedBitmap = BitmapScaler.scaleToFitWidth(rawTakenImage, 500);
+
+                // Configure byte output stream
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                // Compress the image further
+                resizedBitmap.compress(Bitmap.CompressFormat.JPEG, 40, bytes);
+                // Create a new file for the resized bitmap (`getPhotoFileUri` defined above)
+                File resizedFile = getPhotoFileUri(photoFileName + "_resized");
+                try {
+                    resizedFile.createNewFile();
+                    FileOutputStream fos = new FileOutputStream(resizedFile);
+                    // Write the bytes of the bitmap to file
+                    fos.write(bytes.toByteArray());
+                    fos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 // Load the taken image into a preview
-                ivPhoto.setImageBitmap(takenImage);
+                ivPhoto.setImageBitmap(resizedBitmap);
             } else { // Result was a failure
                 Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
@@ -147,23 +168,7 @@ public class PostActivity extends AppCompatActivity {
                     Log.i(TAG, "Post save was successful");
                     etCaption.setText("");
                     ivPhoto.setImageResource(0);
-                }
-            }
-        });
-    }
-
-    private void queryPosts() {
-        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-        query.include(Post.KEY_USER);
-        query.findInBackground(new FindCallback<Post>() {
-            @Override
-            public void done(List<Post> posts, ParseException e) {
-                if (e != null) {
-                    Log.e(TAG, "Issue with getting posts", e);
-                    return;
-                }
-                for (Post post: posts) {
-                    Log.i(TAG, "Post: " + post.getCaption() + ". username: " + post.getUser().getUsername());
+                    finish();
                 }
             }
         });

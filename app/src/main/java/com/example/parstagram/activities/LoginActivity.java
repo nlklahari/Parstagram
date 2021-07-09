@@ -1,4 +1,4 @@
-package com.example.parstagram;
+package com.example.parstagram.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.parstagram.R;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -72,8 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 goMainActivity();
-                // TODO: Can toast still show up if it's called after going to main activity?
-                Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT);
+                Toast.makeText(LoginActivity.this, "Success!", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -90,4 +90,13 @@ public class LoginActivity extends AppCompatActivity {
         this.startActivity(intent);
         finish();
     }
+
+    // TODO
+//    @Override
+//    public void onBackPressed() {
+////        if (ParseUser.getCurrentUser() == null) {
+////
+////        }
+//        super.onBackPressed();
+//    }
 }
