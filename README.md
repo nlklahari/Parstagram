@@ -43,15 +43,14 @@ The following **additional** features are implemented:
 
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
-1. I implemented the Profile fragment but the inheritance way mentioned in the tutorial didn't allow me to add additional features beyond the home feed. I also needed to 
-change the layout, which made it difficult to use inheritance. I want to learn a more efficient way of decreasing code duplicates but still implement unique features.
-2.
+1. I implemented the Profile fragment but the inheritance way mentioned in the tutorial didn't allow me to add additional features beyond the home feed. I also needed to change the layout, which made it difficult to use inheritance. I want to learn a more efficient way of decreasing code duplicates but still implement unique features.
+2. I also want to know how to ensure that multiple likes from a user count only once.
 
 ## Video Walkthrough
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='hhttps://github.com/nlklahari/Parstagram/blob/master/walkthrough.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [Kap](https://getkap.co/).
 
