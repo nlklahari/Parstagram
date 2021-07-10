@@ -14,9 +14,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.parstagram.EndlessRecyclerViewScrollListener;
 import com.example.parstagram.R;
+import com.example.parstagram.adapters.ProfileFragmentAdapter;
 import com.example.parstagram.adapters.TimelineAdapter;
 import com.example.parstagram.models.Post;
 import com.parse.FindCallback;
@@ -30,43 +32,15 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProfileFragment extends FeedFragment {
+public class ProfileFragment extends Fragment {
 
     private static final String TAG = ProfileFragment.class.getSimpleName() ;
 
     private RecyclerView rvFeed;
 
-    protected TimelineAdapter adapter;
+    protected ProfileFragmentAdapter adapter;
     protected List<Post> allPosts;
     private SwipeRefreshLayout swipeContainer;
-
-//    @Override
-//    protected void queryPosts() {
-//        ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
-//        query.include(Post.KEY_USER);
-//        query.whereEqualTo(Post.KEY_USER, ParseUser.getCurrentUser());
-//        query.setLimit(20);
-//        query.addDescendingOrder("createdAt");
-//
-//        query.findInBackground(new FindCallback<Post>() {
-//            @Override
-//            public void done(List<Post> posts, ParseException e) {
-//                // check for errors
-//                if (e != null) {
-//                    Log.e(TAG, "Issue with getting posts", e);
-//                    return;
-//                }
-//
-//                // for debugging purposes let's print every post description to logcat
-//                for (Post post : posts) {
-//                    Log.i(TAG, "Post: " + post.getCaption() + ", username: " + post.getUser().getUsername());
-//                }
-//
-//                // save received posts to list and notify adapter of new data
-//                adapter.addAll(posts);
-//            }
-//        });
-//    }
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -109,7 +83,7 @@ public class ProfileFragment extends FeedFragment {
 
         // initialize the array that will hold posts and create a PostsAdapter
         allPosts = new ArrayList<>();
-        adapter = new TimelineAdapter(getContext(), allPosts);
+        adapter = new ProfileFragmentAdapter(getContext(), allPosts);
 
         // set the adapter on the recycler view
         rvFeed.setAdapter(adapter);
@@ -133,7 +107,6 @@ public class ProfileFragment extends FeedFragment {
         swipeContainer.setRefreshing(false);
     }
 
-    @Override
     protected void queryPosts() {
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         query.include(Post.KEY_USER);

@@ -19,8 +19,6 @@ import com.example.parstagram.models.Post;
 import com.example.parstagram.R;
 import com.parse.ParseFile;
 
-import org.parceler.Parcels;
-
 import java.util.List;
 
 public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHolder> {
