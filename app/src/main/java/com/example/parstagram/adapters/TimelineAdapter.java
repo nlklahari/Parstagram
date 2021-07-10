@@ -19,6 +19,8 @@ import com.example.parstagram.models.Post;
 import com.example.parstagram.R;
 import com.parse.ParseFile;
 
+import org.parceler.Parcels;
+
 import java.util.List;
 
 public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHolder> {
@@ -75,19 +77,7 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
 
             buttonClicks();
 
-            // TODO: Add decorator: https://guides.codepath.org/android/Using-the-RecyclerView#attaching-click-listeners-with-decorators
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION) {
-                        Post post = posts.get(position);
-                        Intent intent = new Intent(context, PostDetailsActivity.class);
-                        intent.putExtra("Selected Post", post);
-                        context.startActivity(intent);
-                    }
-                }
-            });
+
         }
 
         public void bind(Post post) {
@@ -99,6 +89,17 @@ public class TimelineAdapter extends RecyclerView.Adapter<TimelineAdapter.ViewHo
             }
             tvBelowUsername.setText(post.getUser().getUsername());
             tvCaption.setText(post.getCaption());
+            // TODO: Add decorator: https://guides.codepath.org/android/Using-the-RecyclerView#attaching-click-listeners-with-decorators
+
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                        Intent intent = new Intent(context, PostDetailsActivity.class);
+                        intent.putExtra("post", post);
+                        context.startActivity(intent);
+                    }
+                });
         }
 
         private void buttonClicks() {

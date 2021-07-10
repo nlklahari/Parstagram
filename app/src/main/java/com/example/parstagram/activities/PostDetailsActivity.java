@@ -12,6 +12,8 @@ import com.example.parstagram.R;
 import com.example.parstagram.models.Post;
 import com.parse.ParseFile;
 
+import org.parceler.Parcels;
+
 public class PostDetailsActivity extends AppCompatActivity {
 
     private Post post;
@@ -45,7 +47,7 @@ public class PostDetailsActivity extends AppCompatActivity {
         iBtnComment = findViewById(R.id.iBtnComment);
         iBtnMessage = findViewById(R.id.iBtnMessage);
 
-        post = getIntent().getParcelableExtra("Selected Post");
+        post = getIntent().getParcelableExtra("post");
 
         // TODO: Glide.with(context).load(post.getImage()).into(ivProfile);
         tvTopUsername.setText(post.getUser().getUsername());

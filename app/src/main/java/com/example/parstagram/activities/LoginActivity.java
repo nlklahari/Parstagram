@@ -86,7 +86,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // Takes user to main activity
     private void goMainActivity() {
-        Intent intent = new Intent(this, TimelineActivity.class);
+        Intent intent = new Intent(this, MainActivity.class);
         this.startActivity(intent);
         finish();
     }

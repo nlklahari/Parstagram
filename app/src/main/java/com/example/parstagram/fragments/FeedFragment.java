@@ -102,7 +102,7 @@ public class FeedFragment extends Fragment {
         swipeContainer.setRefreshing(false);
     }
 
-    private void queryPosts() {
+    protected void queryPosts() {
         // specify what type of data we want to query - Post.class
         ParseQuery<Post> query = ParseQuery.getQuery(Post.class);
         // include data referred by user key

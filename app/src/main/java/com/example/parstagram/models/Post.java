@@ -7,8 +7,11 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
+import org.parceler.Parcel;
+
 import java.util.Date;
 
+@Parcel(analyze=Post.class)
 @ParseClassName("Post")
 public class Post extends ParseObject {
 

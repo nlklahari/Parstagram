@@ -4,35 +4,26 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
-import com.example.parstagram.EndlessRecyclerViewScrollListener;
 import com.example.parstagram.R;
-import com.example.parstagram.adapters.TimelineAdapter;
 import com.example.parstagram.fragments.FeedFragment;
 import com.example.parstagram.fragments.PostFragment;
 import com.example.parstagram.fragments.ProfileFragment;
-import com.example.parstagram.models.Post;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.parse.FindCallback;
-import com.parse.ParseException;
-import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
-import java.util.ArrayList;
-import java.util.List;
+public class MainActivity extends AppCompatActivity {
 
-public class TimelineActivity extends AppCompatActivity {
-
-    private static final String TAG = TimelineActivity.class.getSimpleName();
+    private static final String TAG = MainActivity.class.getSimpleName();
     private BottomNavigationView bottomNavigationView;
+
+    private Button btnLogOut;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,10 +57,24 @@ public class TimelineActivity extends AppCompatActivity {
 
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.btnLogOut:
+                ParseUser.logOut();
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
